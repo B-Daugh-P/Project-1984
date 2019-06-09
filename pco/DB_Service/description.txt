@@ -1,0 +1,15 @@
+качаээш mysql mysql workbench,  server
+
+------------------------------>
+створення бд в mysql wirkbench
+
+DROP DATABASE IF EXISTS counter;
+
+CREATE DATABASE IF NOT EXISTS counter;
+
+use counter;
+
+CREATE TABLE IF NOT EXISTS in_out(
+people_exists INT NOT NULL
+);
+
