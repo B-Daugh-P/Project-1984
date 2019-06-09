@@ -22,7 +22,10 @@ import time
 import dlib
 import cv2
 
+
 # construct the argument parse and parse the arguments
+from pco.DB_Service.DAOService import DAOService
+
 ap = argparse.ArgumentParser()
 ap.add_argument("-p", "--prototxt", required=True,
 	help="path to Caffe 'deploy' prototxt file")
@@ -86,6 +89,7 @@ totalUp = 0
 # start the frames per second throughput estimator
 fps = FPS().start()
 
+people_diff = 0
 # loop over frames from the video stream
 while True:
 	# grab the next frame and handle if we are reading from either
@@ -237,6 +241,10 @@ while True:
 
 		# store the trackable object in our dictionary
 		trackableObjects[objectID] = to
+
+
+		people_diff = totalUp - totalDown
+		DAOService.insert_in_out_people(DAOService(), people_diff)
 
 		# draw both the ID of the object and the centroid of the
 		# object on the output frame
