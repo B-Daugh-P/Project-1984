@@ -5,7 +5,7 @@ class DAOService:
     def __init__(self):
         self.connection = pymysql.connect(host='localhost',
                                           user='root',
-                                          password='',
+                                          password='toor',
                                           db='counter',
                                           charset='utf8mb4',
                                           cursorclass=pymysql.cursors.DictCursor)
@@ -42,10 +42,7 @@ class DAOService:
     @staticmethod
     def  delete_all(self):
         with self.connection as cursor:
-            sql = "DELETE FROM in_out WHERE in_out.people_exists >= 0"
+            sql = "DELETE FROM in_out"
 
             cursor.execute(sql)
 
-
-DAOService.insert_in_out_people(DAOService(), 10)
-DAOService.select_all(DAOService())
