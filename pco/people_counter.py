@@ -1,13 +1,8 @@
 # USAGE
 # To read and write back out to video:
- #python people_counter.py --prototxt mobilenet_ssd/MobileNetSSD_deploy.prototxt --model mobilenet_ssd/MobileNetSSD_deploy.caffemodel --input videos/example_01.mp4 --output output/output_01.avi
+#python people_counter.py --prototxt mobilenet_ssd/MobileNetSSD_deploy.prototxt --model mobilenet_ssd/MobileNetSSD_deploy.caffemodel --input videos/example_01.mp4 --output output/output_01.avi
+#python people_counter.py --prototxt mobilenet_ssd/MobileNetSSD_deploy.prototxt --model mobilenet_ssd/MobileNetSSD_deploy.caffemodel --output output/webcam_output.avi
 #
-# спочатку gst-launch-0.10 rtspsrc location=rtsp://admin:123456@192.168.0.123:554/mpeg4cif latency=0 ! decodebin ! ffmpegcolorspace ! autovideosink rtspsrc location=rtsp://admin:123456@192.168.2.254:554/mpeg4cif latency=0 ! decodebin ! ffmpegcolorspace ! autovideosink , потім
-# python people_counter.py --prototxt mobilenet_ssd/MobileNetSSD_deploy.prototxt --model mobilenet_ssd/MobileNetSSD_deploy.caffemodel --output output/webcam_output.avi
-# python people_counter.py --prototxt mobilenet_ssd/MobileNetSSD_deploy.prototxt --model mobilenet_ssd/MobileNetSSD_deploy.caffemodel --input rtspsrc --output output/webcam_output.avi
-# python people_counter.py --prototxt mobilenet_ssd/MobileNetSSD_deploy.prototxt --model mobilenet_ssd/MobileNetSSD_deploy.caffemodel --input rtsp://192.168.42.1:554/live --output output/webcam_output.avi
-#	--model mobilenet_ssd/MobileNetSSD_deploy.caffemodel \
-#	--output output/webcam_output.avi
 
 
 # import the necessary packages
@@ -24,7 +19,7 @@ import cv2
 
 
 # construct the argument parse and parse the arguments
-from pco.DB_Service.DAOService import DAOService
+from DB_Service.DAOService import DAOService
 
 ap = argparse.ArgumentParser()
 ap.add_argument("-p", "--prototxt", required=True,
@@ -244,7 +239,7 @@ while True:
 
 
 		people_diff = totalUp - totalDown
-		DAOService.insert_in_out_people(DAOService(), people_diff)
+
 
 		# draw both the ID of the object and the centroid of the
 		# object on the output frame
@@ -282,6 +277,9 @@ while True:
 	# increment the total number of frames processed thus far and
 	# then update the FPS counter
 	totalFrames += 1
+	if totalFrames % 5:
+		DAOService.insert_in_out_people(DAOService(), people_diff)
+
 	fps.update()
 
 # stop the timer and display FPS information
@@ -301,5 +299,6 @@ if not args.get("input", False):
 else:
 	vs.release()
 
+DAOService.delete_all(DAOService())
 # close any open windows
 cv2.destroyAllWindows()
