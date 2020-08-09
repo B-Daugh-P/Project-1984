@@ -1,2 +1,2 @@
 # Project
-Це репозаторій нашого курсового проекту. Тут зібрані код для застосунку основної програми, сайту і програми для мобільних.
+This is repo of my team's term project. Here are gathered code for executables for main program, site and mobile app.
